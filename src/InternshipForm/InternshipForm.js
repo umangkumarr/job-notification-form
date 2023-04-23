@@ -27,7 +27,10 @@ function Copyright() {
                 Traning & Placement Cell
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' | Developed by '}
+            <Link color="inherit" href="https://linkedin.com/in/umangkumarr">
+                Umang Kumar
+            </Link>
         </Typography>
     );
 }
@@ -436,6 +439,8 @@ export default function RecruitForm() {
     }
 
     const [activeStep, setActiveStep] = React.useState(0);
+    const [final_message, setMessage] = React.useState("Thank you for filling out the JNF Form.");
+
 
     const handleNext = () => {
         let check = 1;
@@ -451,13 +456,15 @@ export default function RecruitForm() {
                     console.log(data);
                 }, function (err) {
                     console.log(err);
+                    setMessage("An error occured while sending data.")
                 });
 
-                emailjs.send('service_rsx8uh9', 'template_5rz76r8', FormData, 'A1_EOrdYeLyiIBcxx')
+                emailjs.send('service_6gubn6q', 'template_ldwkxba', FormData, 'sRWlx1ZRk9dr8b7g3')
                     .then((result) => {
                         console.log(result.text);
                     }, (error) => {
                         console.log(error.text);
+                        setMessage("An error occured while sending response to email.");
                     });
             }
             setActiveStep(activeStep + 1);
@@ -487,7 +494,7 @@ export default function RecruitForm() {
                         {activeStep === steps.length ? (
                             <React.Fragment>
                                 <Typography variant="h5" gutterBottom>
-                                    Thank you for filling out the JNF Form.
+                                    {{final_message}}
                                 </Typography>
                                 <Typography variant="subtitle1">
                                     A copy of your response has been sent to the email address provided by you in the company details section.

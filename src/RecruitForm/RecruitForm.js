@@ -16,8 +16,7 @@ import { FormControlLabel, Checkbox, FormGroup, FormLabel } from '@mui/material/
 import emailjs from '@emailjs/browser';
 
 const sheetdb = require("sheetdb-node");
-const client = sheetdb({ address: 'i8z6lpz34z6ww?sheet=JNF_Filled' });
-
+const client = sheetdb({ address: '35lvxyai1ri7c?sheet=recruit' });
 
 function Copyright() {
     return (
@@ -27,7 +26,10 @@ function Copyright() {
                 Traning & Placement Cell
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' | Developed by '}
+            <Link color="inherit" href="https://linkedin.com/in/umangkumarr">
+                Umang Kumar
+            </Link>
         </Typography>
     );
 }
@@ -59,6 +61,7 @@ const FormData = {
     POCContact: "",
     POCEmail: ""
 }
+
 const FormErrors = [{
     emailid: 1,
     OrganizationName: 1,
@@ -83,74 +86,120 @@ const FormErrors = [{
 
 const theme = createTheme();
 
-export default function RecruitForm() {
 
+const POCForm = () => {
 
-    const CompanyDetailsForm = () => {
+    const [Errors, setErrors] = React.useState({
+        POCName: 0,
+        POCDesignation: 0,
+        POCContact: 0,
+        POCEmail: 0
+    });
 
-        const [Errors, setErrors] = React.useState({
-            emailid: 0,
-            OrganizationName: 0,
-            IndustrySector: 0
-        });
+    function handleRequiredChange(event) {
+        const { name, value } = event.target;
 
-        function handleEmailChange(event) {
-            const { name, value } = event.target;
+        let errorval = value.length ? 0 : 1;
 
-            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-            let errorval = re.test(value) ? 0 : 1;
-            setErrors(pre => { return { ...pre, [name]: errorval }; });
-            FormData[name] = value;
-            FormErrors[0][name] = errorval;
-        }
-
-        function handleRequiredChange(event) {
-            const { name, value } = event.target;
-
-            let errorval = value.length ? 0 : 1;
-
-            setErrors(pre => { return { ...pre, [name]: errorval }; });
-            FormData[name] = value;
-            FormErrors[0][name] = errorval;
-        }
-
-        function handleChange(event) {
-            const { name, value } = event.target
-            FormData[name] = value;
-        }
-
-        return (
-            <React.Fragment>
-                <Typography variant="h6" gutterBottom>
-                    Company Details
-                </Typography>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} sm={4}>
-                        <TextField error={Errors['emailid']} required id="email" name="emailid"
-                            label="Email ID" fullWidth type="email" onChange={handleEmailChange} autoComplete="on" variant="standard"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={4}>
-                        <TextField error={Errors['OrganizationName']} onChange={handleRequiredChange} required id="OrganizationName" name="OrganizationName" label="Name of Organization" fullWidth autoComplete="on" variant="standard"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField required id="IndustrySector" error={Errors['IndustrySector']} onChange={handleRequiredChange} name="IndustrySector" label="Industry Sector" fullWidth autoComplete="on" variant="standard"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField id="PostalAddress" name="PostalAddress" label="Postal Address" fullWidth multiline autoComplete="on" variant="standard" onChange={handleChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField id="Website" name="Website" label="Website" fullWidth autoComplete="on" variant="standard" onChange={handleChange}
-                        />
-                    </Grid>
-                </Grid>
-            </React.Fragment>
-        );
+        setErrors(pre => { return { ...pre, [name]: errorval }; });
+        FormData[name] = value;
+        FormErrors[5][name] = errorval;
     }
+
+    return (
+        <React.Fragment>
+            <Typography variant="h6" gutterBottom>
+                Point of Contact(POC) Details
+            </Typography>
+            <Grid container spacing={3}>
+                <Grid item xs={12} sm={6}>
+                    <TextField error={Errors['POCName']} required id="POC" name="POCName" label="Name of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField error={Errors['POCDesignation']} required id="POCDesignation" name="POCDesignation" label="Designation of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField error={Errors['POCContact']} required id="POCContact" name="POCContact" label="Contact number of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField error={Errors['POCEmail']} id="POCEmail" required name="POCEmail" label="Email id of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
+                    />
+                </Grid>
+            </Grid>
+        </React.Fragment>
+    );
+}
+
+const CompanyDetailsForm = () => {
+
+    const [Errors, setErrors] = React.useState({
+        emailid: 0,
+        OrganizationName: 0,
+        IndustrySector: 0
+    });
+
+    function handleEmailChange(event) {
+        const { name, value } = event.target;
+
+        let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        let errorval = re.test(value) ? 0 : 1;
+        setErrors(pre => { return { ...pre, [name]: errorval }; });
+        FormData[name] = value;
+        FormErrors[0][name] = errorval;
+    }
+
+    function handleRequiredChange(event) {
+        const { name, value } = event.target;
+
+        let errorval = value.length ? 0 : 1;
+
+        setErrors(pre => { return { ...pre, [name]: errorval }; });
+        FormData[name] = value;
+        FormErrors[0][name] = errorval;
+    }
+
+    function handleChange(event) {
+        const { name, value } = event.target
+        FormData[name] = value;
+    }
+
+    return (
+        <React.Fragment>
+            <Typography variant="h6" gutterBottom>
+                Company Details
+            </Typography>
+            <Grid container spacing={3}>
+                <Grid item xs={12} sm={4}>
+                    <TextField error={Errors['emailid']} required id="email" name="emailid"
+                        label="Email ID" fullWidth type="email" onChange={handleEmailChange} autoComplete="on" variant="standard"
+                    />
+                </Grid>
+                <Grid item xs={12} sm={4}>
+                    <TextField error={Errors['OrganizationName']} onChange={handleRequiredChange} required id="OrganizationName" name="OrganizationName" label="Name of Organization" fullWidth autoComplete="on" variant="standard"
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField required id="IndustrySector" error={Errors['IndustrySector']} onChange={handleRequiredChange} name="IndustrySector" label="Industry Sector" fullWidth autoComplete="on" variant="standard"
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField id="PostalAddress" name="PostalAddress" label="Postal Address" fullWidth multiline autoComplete="on" variant="standard" onChange={handleChange}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField id="Website" name="Website" label="Website" fullWidth autoComplete="on" variant="standard" onChange={handleChange}
+                    />
+                </Grid>
+            </Grid>
+        </React.Fragment>
+    );
+}
+
+export default function RecruitForm() {
 
 
     const EligibilityForm = () => {
@@ -170,13 +219,13 @@ export default function RecruitForm() {
             const { name } = event.target
             cnt[name]++;
             FormData["EligibileBranchesBTech"] = "";
-            for(let v in cnt){
-                if(cnt[v]%2){
+            for (let v in cnt) {
+                if (cnt[v] % 2) {
                     FormData["EligibileBranchesBTech"] += names[v];
                 }
             }
             var len = FormData["EligibileBranchesBTech"]
-            if(FormData["EligibileBranchesBTech"].length > 2){
+            if (FormData["EligibileBranchesBTech"].length > 2) {
                 FormData["EligibileBranchesBTech"] = len.slice(0, -2);
             }
         }
@@ -189,13 +238,13 @@ export default function RecruitForm() {
             const { name } = event.target
             cnt2[name]++;
             FormData["EligibileBranchesMTech"] = "";
-            for(let v in cnt2){
-                if(cnt2[v]%2){
+            for (let v in cnt2) {
+                if (cnt2[v] % 2) {
                     FormData["EligibileBranchesMTech"] += names[v];
                 }
             }
             var len = FormData["EligibileBranchesMTech"]
-            if(FormData["EligibileBranchesMTech"].length > 2){
+            if (FormData["EligibileBranchesMTech"].length > 2) {
                 FormData["EligibileBranchesMTech"] = len.slice(0, -2);
             }
         }
@@ -398,51 +447,51 @@ export default function RecruitForm() {
         );
     }
 
-    const POCForm = () => {
+    // const POCForm = () => {
 
-        const [Errors, setErrors] = React.useState({
-            POCName: 0,
-            POCDesignation: 0,
-            POCContact: 0,
-            POCEmail: 0
-        });
+    //     const [Errors, setErrors] = React.useState({
+    //         POCName: 0,
+    //         POCDesignation: 0,
+    //         POCContact: 0,
+    //         POCEmail: 0
+    //     });
 
-        function handleRequiredChange(event) {
-            const { name, value } = event.target;
+    //     function handleRequiredChange(event) {
+    //         const { name, value } = event.target;
 
-            let errorval = value.length ? 0 : 1;
+    //         let errorval = value.length ? 0 : 1;
 
-            setErrors(pre => { return { ...pre, [name]: errorval }; });
-            FormData[name] = value;
-            FormErrors[5][name] = errorval;
-        }
+    //         setErrors(pre => { return { ...pre, [name]: errorval }; });
+    //         FormData[name] = value;
+    //         FormErrors[5][name] = errorval;
+    //     }
 
-        return (
-            <React.Fragment>
-                <Typography variant="h6" gutterBottom>
-                    Point of Contact(POC) Details
-                </Typography>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} sm={6}>
-                        <TextField error={Errors['POCName']} required id="POC" name="POCName" label="Name of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField error={Errors['POCDesignation']} required id="POCDesignation" name="POCDesignation" label="Designation of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField error={Errors['POCContact']} required id="POCContact" name="POCContact" label="Contact number of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField error={Errors['POCEmail']} id="POCEmail" required name="POCEmail" label="Email id of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
-                        />
-                    </Grid>
-                </Grid>
-            </React.Fragment>
-        );
-    }
+    //     return (
+    //         <React.Fragment>
+    //             <Typography variant="h6" gutterBottom>
+    //                 Point of Contact(POC) Details
+    //             </Typography>
+    //             <Grid container spacing={3}>
+    //                 <Grid item xs={12} sm={6}>
+    //                     <TextField error={Errors['POCName']} required id="POC" name="POCName" label="Name of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
+    //                     />
+    //                 </Grid>
+    //                 <Grid item xs={12} sm={6}>
+    //                     <TextField error={Errors['POCDesignation']} required id="POCDesignation" name="POCDesignation" label="Designation of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
+    //                     />
+    //                 </Grid>
+    //                 <Grid item xs={12} sm={6}>
+    //                     <TextField error={Errors['POCContact']} required id="POCContact" name="POCContact" label="Contact number of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
+    //                     />
+    //                 </Grid>
+    //                 <Grid item xs={12} sm={6}>
+    //                     <TextField error={Errors['POCEmail']} id="POCEmail" required name="POCEmail" label="Email id of POC" fullWidth autoComplete="on" variant="standard" onChange={handleRequiredChange}
+    //                     />
+    //                 </Grid>
+    //             </Grid>
+    //         </React.Fragment>
+    //     );
+    // }
 
     const steps = ['Company Details', 'Eligibility Criteria', 'Job Description', 'Selection Procedure', 'Compensation', 'Point of Contact(POC) Details',];
 
@@ -467,6 +516,7 @@ export default function RecruitForm() {
     }
 
     const [activeStep, setActiveStep] = React.useState(0);
+    const [final_message, setMessage] = React.useState("Thank you for filling out the JNF Form.");
 
     const handleNext = () => {
         let check = 1;
@@ -484,11 +534,12 @@ export default function RecruitForm() {
                 });
 
 
-                emailjs.send('service_rsx8uh9', 'template_5rz76r8', FormData, 'A1_EOrdYeLyiIBcxx')
+                emailjs.send('service_6gubn6q', 'template_ldwkxba', FormData, 'sRWlx1ZRk9dr8b7g3')
                     .then((result) => {
                         console.log(result.text);
                     }, (error) => {
                         console.log(error.text);
+                        setMessage("An error occured while sending response to email.");
                     });
             }
             setActiveStep(activeStep + 1);
@@ -550,7 +601,7 @@ export default function RecruitForm() {
                                     )}
 
                                     <Button
-                                        style={{backgroundColor:"#253053"}}
+                                        style={{ backgroundColor: "#253053" }}
                                         variant="contained"
                                         onClick={handleNext}
                                         sx={{ mt: 3, ml: 1 }}
